@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Literal, Any
+import time
 
 @dataclass(frozen=True)
 class BGColor:
@@ -33,7 +34,10 @@ def printok(*values: object, sep: str | None = " ", end: str | None = "\n", file
     print(*values, sep=sep, end=end, file=file, flush=flush)
 
 if __name__ == "__main__":
-    printwarning("some warning")
-    printerror("some warning")
-    printgood("some warning")
-    printok("some warning")
+    print(time.strptime("%H:%M:%S"))
+    # while True:
+    #     try:
+    #         print(f"\r{time.time()}", flush=True)
+    #         print
+    #     except KeyboardInterrupt as _:
+    #         break

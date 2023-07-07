@@ -2,6 +2,20 @@ import sys
 from iterfile import RandomizeIterFile, FileIsNotFolder, ChaosMethod
 from maid import printerror, printwarning, printok, printgood
 
+help_prompt = """\
+chaosname [/h] [PATH] ([/r | /s] [LENGTH | default]) [*NOTE]
+
+arguments :
+    PATH   = path to the target file.
+    LENGTH = if the method is random then the length must be specified (default = 5).
+    *NOTE  = 'n' number of note will be displayed.
+
+options   :
+    [/h, -h, /help, --help]         = help command.
+    [/r, -r, /random, --random]     = random method.
+    [/s, -s, /scramble, --scramble] = scramble method.
+"""
+
 def main() -> None:
     method_comm = {
         "scramble": ["/s", "-s", "/scramble", "--scramble"],
@@ -11,7 +25,7 @@ def main() -> None:
     _, *term_arg = sys.argv
 
     if len(term_arg) == 1 and term_arg[-1] in ["/h", "-h", "/help", "--help"]:
-        print("help!")
+        print(help_prompt) # implement help prompt
         quit()
 
     try:
@@ -31,21 +45,26 @@ def main() -> None:
                 printerror("randomize command lack randomize length argument")
                 quit(7)
 
-            # if not valid number
-            if not rand_len.isdigit():
-                printerror("random length must be a whole number")
-                quit(5)
+            # default argument for randomize length
+            if rand_len == "default":
+                itf.randomize_len = 5
+            else:
+                # if not valid number
+                if not rand_len.isdigit():
+                    printerror("random length must be a whole number")
+                    quit(5)
 
-            rand_len = int(rand_len)
+                rand_len = int(rand_len)
 
-            # if lower than allowed limit
-            if rand_len < 5:
-                printerror("random length cannot exceed lower than '5'")
-                quit(6)
+                # if lower than allowed limit
+                if rand_len < 5:
+                    printerror("random length cannot exceed lower than '5'")
+                    quit(6)
 
-            itf.randomize_len = rand_len
-        elif method in method_comm["scramble"]:
-            itf.randomize_len = 5
+                itf.randomize_len = rand_len
+        # not use
+        # elif method in method_comm["scramble"]:
+        #     itf.randomize_len = 5
     # if argument cannot met the requirements
     except ValueError as _:
         printerror("command lack argument at least more than '2' argument")
@@ -70,7 +89,13 @@ def main() -> None:
 
     col_det = None
     try:
+        temp = detail
         col_det, *detail = detail
+
+        if col_det not in ["/b", "-b"] and col_det not in ["/g", "-g"]:
+            detail = temp
+
+        del temp
     except ValueError as _:
         pass # ignore
 

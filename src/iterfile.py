@@ -1,6 +1,7 @@
 import pathlib
 import random
 import string
+import time
 from enum import Enum, auto
 from typing import Self, Iterable
 
@@ -108,8 +109,10 @@ class RandomizeIterFile:
         unnamed_file = []
 
         for file_ in self:
+            set_end = time.time() + 30
             try:
                 while True:
+                    # in this will implement time counting, to prevent naming something too long
                     match method:
                         case ChaosMethod.Scramble:
                             new_file = file_.with_name(
@@ -122,6 +125,9 @@ class RandomizeIterFile:
                     if (
                         new_file in self.path.iterdir()
                     ):  # preventing same name occurence
+                        if time.time() >= set_end: # preventing choosing the name too long for short amount of time
+                            file_.rename(new_file)
+                            break
                         continue
                     else:
                         file_.rename(new_file)
