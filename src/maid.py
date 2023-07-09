@@ -34,10 +34,4 @@ def printok(*values: object, sep: str | None = " ", end: str | None = "\n", file
     print(*values, sep=sep, end=end, file=file, flush=flush)
 
 if __name__ == "__main__":
-    print(time.strptime("%H:%M:%S"))
-    # while True:
-    #     try:
-    #         print(f"\r{time.time()}", flush=True)
-    #         print
-    #     except KeyboardInterrupt as _:
-    #         break
+    pass
